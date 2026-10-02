@@ -11,10 +11,13 @@ export async function POST(req: NextRequest) {
     }
 
     try {
+        const defaultImage = `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
+            session.user.name || session.user.email,
+        )}`;
         const result = await db.insert(users).values({
             email: session?.user?.email,
             name: session?.user?.name,
-            image: session?.user?.image || "",
+            image: session?.user?.image || defaultImage,
         }).onConflictDoNothing({
             target: users.email,
         }).returning();
