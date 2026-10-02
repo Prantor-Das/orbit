@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { inngest } from '@/lib/inngest/client';
+import { NextResponse } from "next/server";
+import { inngest } from "@/lib/inngest/client";
 
 /**
  * Example API Endpoint to trigger/enqueue an Inngest background event
@@ -12,17 +12,17 @@ export async function POST(req: Request) {
 
     // Send an event to Inngest to trigger the background function
     const result = await inngest.send({
-      name: 'app/task.process',
+      name: "app/task.process",
       data: {
         taskId,
-        message: body.message || 'Background task triggered from API route',
+        message: body.message || "Background task triggered from API route",
         timestamp: new Date().toISOString(),
       },
     });
 
     return NextResponse.json({
       success: true,
-      message: 'Background job enqueued successfully!',
+      message: "Background job enqueued successfully!",
       result,
       taskId,
     });

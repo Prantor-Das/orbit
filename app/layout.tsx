@@ -1,14 +1,15 @@
+import { UI } from "@/lib/constants/ui";
 import { AuthProvider } from "@/components/session-provider";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
 
 export const metadata: Metadata = {
-  title: "Orbit",
-  description: "AI agents that can connect to tools, automate tasks, and use a cloud desktop to browse the web",
+  title: UI.name,
+  description: UI.description,
 };
 
-const figtree = Figtree({ subsets: ["latin"] });
+const figtree = Figtree({ subsets: ["latin"], variable: "--font-figtree" });
 
 export default function RootLayout({
   children,
@@ -16,12 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        style={{ margin: 0, padding: 0 }}
-        className={figtree.className}
-        suppressHydrationWarning
-      >
+    <html lang="en" className={figtree.variable} suppressHydrationWarning>
+      <body style={{ margin: 0, padding: 0 }} className="font-sans" suppressHydrationWarning>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
