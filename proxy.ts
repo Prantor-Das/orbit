@@ -16,15 +16,10 @@ export default withAuth(
       signIn: "/sign-in",
     },
     secret: process.env.NEXTAUTH_SECRET || "default-development-secret-change-in-env",
-  }
+  },
 );
 
 // Define which routes to protect/restrict from unauthorized users
 export const config = {
-  matcher: [
-    "/protected/:path*",
-    "/admin/:path*",
-    "/profile/:path*",
-    "/settings/:path*",
-  ],
+  matcher: ["/workspace/:path*", "/admin/:path*", "/profile/:path*", "/settings/:path*"],
 };
