@@ -9,11 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useWorkspaceAgents } from "./WorkspaceAgentsProvider";
+import { useWorkspaceAgents } from "@/components/custom/workspace/WorkspaceAgentsProvider";
 
-export default function CreateAgentForm() {
+export default function CreateAgentPage() {
   const router = useRouter();
-  const { addAgent } = useWorkspaceAgents();
+  const { addAgent, isReady } = useWorkspaceAgents();
+  const [saveError, setSaveError] = useState(false);
   const [avatarIndex, setAvatarIndex] = useState(0);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -30,7 +31,12 @@ export default function CreateAgentForm() {
       return;
     }
     const id = crypto.randomUUID();
-    addAgent({ ...avatar, id, name: name.trim(), description: description.trim() });
+    try {
+      addAgent({ ...avatar, id, name: name.trim(), description: description.trim() });
+    } catch {
+      setSaveError(true);
+      return;
+    }
     router.push(`/workspace?agent=${encodeURIComponent(id)}`);
   }
 
@@ -127,6 +133,11 @@ export default function CreateAgentForm() {
               </p>
             </div>
           </div>
+          {saveError && (
+            <p role="alert" className="mt-3 text-sm text-destructive">
+              {copy.saveError}
+            </p>
+          )}
           <div className="agent-create-actions mt-5 flex flex-wrap justify-end gap-3">
             <Button
               type="button"
@@ -137,7 +148,7 @@ export default function CreateAgentForm() {
             >
               {copy.cancel}
             </Button>
-            <Button type="submit" size="lg" className="h-11 min-w-36">
+            <Button type="submit" disabled={!isReady} size="lg" className="h-11 min-w-36">
               <UIAsset asset={UI.icons.createAgent} className="size-4" />
               {copy.submit}
             </Button>

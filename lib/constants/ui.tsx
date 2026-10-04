@@ -64,6 +64,7 @@ export const UI = {
   description:
     "AI agents that can connect to tools, automate tasks, and use a cloud desktop to browse the web",
   logo: { icon: Orbit } as UIAsset,
+  routes: { createAgent: "/workspace/create-agent" },
   icons: {
     createAgent: { icon: Plus } as UIAsset,
     shuffleImage: { icon: Shuffle } as UIAsset,
@@ -111,6 +112,11 @@ export const UI = {
     submit: "Create Agent",
     cancel: "Cancel",
     nameError: "Enter a name for your agent.",
+    saveError: "Unable to save your agent. Enable browser storage and try again.",
+    loading: "Loading your agent…",
+    unavailable: "Agent unavailable",
+    unavailableDescription:
+      "This agent is not saved in this browser for your account. Shared agents across devices are not supported yet.",
     ready: "Your agent is ready. Tools and behavior configuration are coming soon.",
   },
 };

@@ -3,7 +3,7 @@
 import AccountDrawer from "./AccountDrawer";
 import { useWorkspaceAgents } from "./WorkspaceAgentsProvider";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { UI, type SidebarAgent } from "@/lib/constants/ui";
 import { UIAsset } from "@/components/custom/UIAsset";
@@ -21,8 +21,10 @@ export default function AppSidebar({ agents: suppliedAgents }: { agents?: Sideba
   const agents = suppliedAgents ?? workspaceAgents;
   const { data: session, status } = useSession();
   const params = useSearchParams();
+  const pathname = usePathname();
+  const isCreateAgent = pathname === UI.routes.createAgent;
   const { setOpenMobile } = useSidebar();
-  const view = params.get("view");
+  const view = pathname === "/workspace" ? params.get("view") : null;
   const activeAgent = params.get("agent");
   const username =
     session?.user?.name ||
@@ -51,9 +53,9 @@ export default function AppSidebar({ agents: suppliedAgents }: { agents?: Sideba
           <span className="text-2xl font-semibold tracking-tight">{UI.name}</span>
         </Link>
         <Link
-          href="/workspace?view=new"
+          href={UI.routes.createAgent}
           onClick={closeMobile}
-          aria-current={view === "new" ? "page" : undefined}
+          aria-current={isCreateAgent ? "page" : undefined}
           className="flex h-11 items-center justify-center gap-2 rounded-xl bg-sidebar-primary px-3 text-sm font-medium text-sidebar-primary-foreground shadow-sm transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sidebar-ring"
         >
           <UIAsset asset={UI.icons.createAgent} className="size-4" />
@@ -70,7 +72,7 @@ export default function AppSidebar({ agents: suppliedAgents }: { agents?: Sideba
           </div>
           <ul className="space-y-1">
             {agents.map((agent) => {
-              const active = !view && activeAgent === agent.id;
+              const active = pathname === "/workspace" && !view && activeAgent === agent.id;
               return (
                 <li key={agent.id}>
                   <Link
